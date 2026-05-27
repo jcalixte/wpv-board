@@ -19,6 +19,10 @@ const props = defineProps<{
   cap?: number
 }>()
 
+// Forward a Section click up so the page can open that section's verbatim modal
+// (T8); BoardView owns the click, DotMap just relays the id.
+defineEmits<{ select: [sectionId: string] }>()
+
 const cap = computed(() => props.cap ?? 10)
 
 // Group the feed by section, preserving its newest-first order.
@@ -56,7 +60,7 @@ function dotStyle(index: number) {
 </script>
 
 <template>
-  <BoardView>
+  <BoardView @select="$emit('select', $event)">
     <template #overlay="{ sectionId }">
       <span
         v-for="(defect, index) in dotsFor(sectionId)"

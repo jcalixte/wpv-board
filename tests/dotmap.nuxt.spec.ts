@@ -56,4 +56,16 @@ describe('DotMap', () => {
 
     expect(section(wrapper, 'macroplan').find('[data-test="more"]').exists()).toBe(false)
   })
+
+  it('emits the clicked section id (so the page can open its verbatim modal)', async () => {
+    const wrapper = await mountSuspended(DotMap, {
+      props: {
+        defects: [{ id: 'd1', sectionId: 'macroplan', createdAt: '2026-05-28T10:00:00Z' }],
+        counts: { macroplan: 1 },
+      },
+    })
+
+    await section(wrapper, 'macroplan').trigger('click')
+    expect(wrapper.emitted('select')?.[0]).toEqual(['macroplan'])
+  })
 })

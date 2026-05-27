@@ -6,6 +6,9 @@ import { sections } from '~/board/definition'
 interface DefectView {
   id: string
   sectionId: string
+  projectName: string
+  reporterEmail: string
+  verbatim: string
   createdAt: string
 }
 
@@ -18,6 +21,10 @@ const { data: defects } = await useFetch<DefectView[]>('/api/defects', {
 const { data: counts } = await useFetch<Record<string, number>>('/api/defects/counts', {
   default: () => ({}),
 })
+
+// Which section's verbatim modal is open (null = closed). A click on any
+// Section/dot in the DotMap sets it; the modal lazily loads that section (T8).
+const openSection = ref<string | null>(null)
 </script>
 
 <template>
@@ -27,8 +34,10 @@ const { data: counts } = await useFetch<Record<string, number>>('/api/defects/co
       <p class="opacity-70">Every defect filed on the board.</p>
     </header>
 
-    <DotMap :defects="defects" :counts="counts" />
+    <DotMap :defects="defects" :counts="counts" @select="openSection = $event" />
 
-    <p class="opacity-60">The defect feed and verbatim modal (T8) land next.</p>
+    <DefectFeed :defects="defects" />
+
+    <VerbatimModal :section-id="openSection" @close="openSection = null" />
   </main>
 </template>

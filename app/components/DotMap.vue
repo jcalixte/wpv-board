@@ -48,7 +48,7 @@ function formatDate(value: string | Date): string {
 function dotStyle(index: number) {
   return {
     left: `${12 + (index % 5) * 11}%`,
-    top: `${24 + Math.floor(index / 5) * 20}%`,
+    top: `${22 + Math.floor(index / 5) * 28}%`,
   }
 }
 </script>

@@ -50,7 +50,15 @@ const hoveredId = ref<string | null>(null)
 <style scoped>
 .board {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  /* Each column hugs its widest block, blocks stretch to fill their cell, and
+     the grid is centered. So the two left blocks (Value for Customer, Tech-
+     Enabled) share one width and the two right blocks (Right First Time,
+     Building a Learning Organisation) share another, the bottoms line up, and
+     the outer silhouette stays a clean rectangle. The left column lands a touch
+     under half the right — wide enough to hold its A3 sheet without forcing a
+     rigid ratio. */
+  grid-template-columns: max-content max-content;
+  justify-content: center;
   gap: 0.75rem;
   font-family: 'Cutive Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   /* Base = A4 long side; A3/A2 derive from it by √2 so ratios stay exact.

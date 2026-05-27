@@ -3,19 +3,19 @@
 ## Overview
 
 Build the Andon app per [DESIGN.md](../DESIGN.md): a Nuxt 3 full-stack Vue app
-serving two domains (`andon.apoena.dev` reporting, `dashboard.andon.apoena.dev`
-viewing), backed by SQLite/Drizzle, gated by Google SSO, with Web Push to the
-owner. Team members file **Defects** about board **Sections**; the dashboard
-renders a red-dot **Weak Point** map. Build order follows the House of Quality
+on one domain (`andon.apoena.dev`) — `/` reports a defect, `/defects` shows the
+weak-point view (ADR 0004) — backed by Postgres/Drizzle, gated by Google SSO,
+with Web Push to the owner. Team members file **Defects** about board
+**Sections**; `/defects` renders a red-dot **Weak Point** map. Build order follows the House of Quality
 weights: the board definition (F1) is the spine, then frictionless filing
 (F2/F3), then the weak-point map (F4/F5), then auth (F9), notifications (F7/F8),
 and deployment/durability (F10).
 
 ## Architecture Decisions
 
-- **Single Nuxt 3 app, two domains** — host-based routing selects the reporting
-  vs dashboard view; one auth layer, one DB, one board-definition module shared
-  by both (DESIGN §3, F1). Avoids drift between the apps.
+- **Single Nuxt 3 app, one domain, two routes** — `/` reports, `/defects` views;
+  one auth layer, one DB, one board-definition module shared by both (F1).
+  Transparency over separation now that auth gates everyone (ADR 0004).
 - **Coolify-managed PostgreSQL + Drizzle (`pg` driver)** — automatic backups and
   no single-instance deploy constraint; chosen over SQLite once deploying on
   Coolify (DESIGN T5, F10, ADR 0003). Local dev runs Postgres via docker-compose.
@@ -175,12 +175,12 @@ auto. Target ≤3 interactions / ≤15s.
 **Description:** `GET /api/defects` returning a reverse-chronological feed
 (bounded slice) and `GET /api/defects/counts` returning per-section counts;
 `GET /api/defects?section=ID` for one section's history (lazy, for the modal).
-Index `(section_id, created_at)`. Target ≤1s at ~2k rows.
+Index `(section_id, created_at)`. Target ≤350ms at ~2k rows.
 
 **Acceptance criteria:**
 - [ ] Feed returns newest-first, bounded.
 - [ ] Counts endpoint returns `{ sectionId: n }` for all sections.
-- [ ] With 2,000 seeded defects, dashboard queries return in ≤1s.
+- [ ] With 2,000 seeded defects, dashboard queries return in ≤350ms.
 
 **Verification:**
 - [ ] API test: `pnpm test -- defects-read`
@@ -232,7 +232,7 @@ list beside the board shows all defects newest-first.
 
 ### Checkpoint: Weak points visible
 - [ ] Dashboard shows the dot map, feed, and modal end-to-end
-- [ ] ≤1s render with 2k seeded defects
+- [ ] ≤350ms render with 2k seeded defects
 - [ ] Review with human before proceeding
 
 ### Phase 4 — Authentication (Goal G4)

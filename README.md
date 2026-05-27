@@ -8,10 +8,12 @@ company-wide (Dantotsu).
 
 Two apps, one codebase, behind Google SSO (`@theodo.com`):
 
-- **`andon.apoena.dev`** — the reporting view: click an ASCII board section, pick
-  your project, describe the problem.
-- **`dashboard-andon.apoena.dev`** — the same board as a red-dot defect map, a
+- **`/`** — the reporting view: click an ASCII board section, pick your project,
+  describe the problem.
+- **`/defects`** — the same board as a red-dot defect map, a
   reverse-chronological feed, and verbatims in a modal.
+
+Both live on one domain, `andon.apoena.dev` (ADR 0004).
 
 ## Status
 
@@ -60,7 +62,7 @@ migrate step is needed.
 2. Create a **managed Postgres** in Coolify (automatic backups — [ADR 0003](./docs/adr/0003-use-coolify-managed-postgres-over-sqlite.md))
    and set `DATABASE_URL` to it. _(Alternatively deploy `docker-compose.yml`, which bundles a Postgres service.)_
 3. Set the env vars from [`.env.example`](./.env.example) (`NUXT_SESSION_SECRET`,
-   Google OAuth, VAPID) and route `andon.apoena.dev` + `dashboard-andon.apoena.dev` to the service.
+   Google OAuth, VAPID) and route `andon.apoena.dev` to the service.
 4. **Enable Coolify's autodeploy** so it builds and deploys on every push to
    `main`. Protect `main` with required PR review + CI so only vetted commits
    reach production.

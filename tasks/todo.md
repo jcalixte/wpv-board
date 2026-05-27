@@ -26,7 +26,7 @@ review.
 - [ ] ⛳ **Checkpoint:** both views gated to @theodo.com, reporters real, human review
 
 ## Phase 5 — Notifications (G3)
-- [ ] **T10** Web Push subscribe + service worker (C10) — F8 (M) — _deps: T3, T9_
+- [x] **T10** Web Push subscribe + service worker (C10) — F8 (M) — _deps: T3, T9_
 - [ ] **T11** Send push on defect filed (fire-and-forget) — F7 (S) — _deps: T5, T10_
 - [ ] ⛳ **Checkpoint:** file → push arrives ≤10s, filing latency unaffected, human review
 
@@ -38,4 +38,4 @@ review.
 - [x] Google OAuth client provisioning (blocks T9) — client provided; redirect URI `…/auth/google/callback`
 - [ ] Confirm pnpm + Vitest + Playwright vs Theodo template (affects T1)
 - [ ] Coolify two-domain routing model (affects T12)
-- [ ] "Owner only" vs any subscribed user for push (affects T10/T11)
+- [x] "Owner only" vs any subscribed user for push (affects T10/T11) — owner-only, gated by `NUXT_PUBLIC_OWNER_EMAIL`

@@ -86,19 +86,20 @@ function dotStyle(index: number) {
 
 .dot__date {
   position: absolute;
-  left: 0.7rem;
-  bottom: 0.7rem;
+  /* Anchored at the dot's bottom-right corner, splaying diagonally down-right. */
+  top: 0.5rem;
+  left: 0.5rem;
   font-size: 0.6rem;
   line-height: 1;
   white-space: nowrap;
-  /* Diagonal label, as on the physical board. */
-  transform: rotate(-45deg);
-  transform-origin: bottom left;
+  transform: rotate(45deg);
+  transform-origin: top left;
 }
 
 .dot-more {
   position: absolute;
-  right: 0.4rem;
+  /* Bottom-left, clear of the A2/A3/A4 size label at the bottom-right. */
+  left: 0.4rem;
   bottom: 0.4rem;
   font-size: 0.7rem;
   font-weight: 600;

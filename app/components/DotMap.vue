@@ -47,8 +47,8 @@ function formatDate(value: string | Date): string {
 // Cosmetic scatter: a stable 5-wide grid inside the box (ADR T7).
 function dotStyle(index: number) {
   return {
-    left: `${12 + (index % 5) * 17}%`,
-    top: `${20 + Math.floor(index / 5) * 22}%`,
+    left: `${12 + (index % 5) * 11}%`,
+    top: `${24 + Math.floor(index / 5) * 20}%`,
   }
 }
 </script>
@@ -86,9 +86,9 @@ function dotStyle(index: number) {
 
 .dot__date {
   position: absolute;
-  /* Anchored at the dot's bottom-right corner, splaying diagonally down-right. */
+  /* Anchored just under the dot, splaying diagonally down-right. */
   top: 0.5rem;
-  left: 0.5rem;
+  left: 0.85rem;
   font-size: 0.6rem;
   line-height: 1;
   white-space: nowrap;

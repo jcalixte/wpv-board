@@ -1,5 +1,12 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: light --default;
+}
+
 /* Headings use Playfair Display (loaded via the coollabs fonts API in
-   nuxt.config). The board supplies its own Cutive Mono for section labels. */
+   nuxt.config). The board supplies its own Cutive Mono for section labels.
+   Tailwind's preflight resets heading font-size/weight to inherit, so we
+   re-assert the hand-crafted sizes here to preserve the prior look. */
 h1,
 h2,
 h3,
@@ -7,4 +14,24 @@ h4,
 h5,
 h6 {
   font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 2em;
+}
+h2 {
+  font-size: 1.5em;
+}
+h3 {
+  font-size: 1.25em;
+}
+h4 {
+  font-size: 1em;
+}
+h5 {
+  font-size: 0.875em;
+}
+h6 {
+  font-size: 0.75em;
 }

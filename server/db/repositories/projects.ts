@@ -1,4 +1,4 @@
-import { asc, sql } from 'drizzle-orm'
+import { asc, eq, sql } from 'drizzle-orm'
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres'
 import type * as schema from '../schema'
 import { projects } from '../schema'
@@ -32,6 +32,16 @@ export async function createProject(db: Db, rawName: string): Promise<Project> {
     if (row) return row
     throw err
   }
+}
+
+/** A project's name by id — used to label the push notification on file (T11). */
+export async function getProjectName(db: Db, id: string): Promise<string | undefined> {
+  const [row] = await db
+    .select({ name: projects.name })
+    .from(projects)
+    .where(eq(projects.id, id))
+    .limit(1)
+  return row?.name
 }
 
 async function findByName(db: Db, name: string): Promise<Project | undefined> {

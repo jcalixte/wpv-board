@@ -27,7 +27,7 @@ review.
 
 ## Phase 5 — Notifications (G3)
 - [x] **T10** Web Push subscribe + service worker (C10) — F8 (M) — _deps: T3, T9_
-- [ ] **T11** Send push on defect filed (fire-and-forget) — F7 (S) — _deps: T5, T10_
+- [x] **T11** Send push on defect filed (fire-and-forget) — F7 (S) — _deps: T5, T10_
 - [ ] ⛳ **Checkpoint:** file → push arrives ≤10s, filing latency unaffected, human review
 
 ## Phase 6 — Ship (F10)

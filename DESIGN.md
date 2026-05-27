@@ -35,7 +35,7 @@ Strength weights used in matrices: **9** strong, **3** medium, **1** weak, blank
 | F7  | Deliver a push promptly after a defect is filed                   |  ↓  | ≤ ~10s to subscribed devices                              |
 | F8  | Enroll & maintain push subscriptions                              |  →  | Multiple devices; survives re-subscribe                   |
 | F9  | Gate every request behind Google SSO + server-side domain check   |  →  | 100% of routes; `hd` never trusted alone                  |
-| F10 | Persist data durably across redeploys                             |  →  | 0 data loss (volume-backed SQLite)                        |
+| F10 | Persist data durably across redeploys                             |  →  | 0 data loss (Coolify-managed Postgres, auto-backups)      |
 
 ## 3. Cascade — Goals → Functions → How → Components
 
@@ -71,7 +71,7 @@ Strength weights used in matrices: **9** strong, **3** medium, **1** weak, blank
     - **How**: Google OAuth/OIDC; server-side verified-email-domain check (`hd` not trusted alone); default-deny middleware
       - **Component**: C9 Auth middleware
   - **F10** Persist durably across redeploys  _→ 0 loss_
-    - **How**: SQLite file on a Coolify persistent volume (rejected: Postgres container — see T5)
+    - **How**: Coolify-managed PostgreSQL with automatic backups (rejected: SQLite on a volume — see T5, ADR 0003)
       - **Component**: C8 schema, C11 deploy
 
 ## 4. House — Functions × Goals (transposed for width)
@@ -123,7 +123,7 @@ Cells: link strength (9/3/1/blank). Importance = `Σ(goal weight × strength)`.
 | C5  | DotMap (dots + diagonal dates + "+N more")            | —       |
 | C6  | VerbatimModal + reverse-chronological Feed            | ADR 0002 |
 | C7  | Nuxt/Nitro server API (defects, projects, subs)       | ADR 0001 |
-| C8  | SQLite + Drizzle schema (defects, projects, push_subscriptions) | ADR 0001 |
+| C8  | PostgreSQL + Drizzle schema (defects, projects, push_subscriptions) | ADR 0001, ADR 0003 |
 | C9  | Google OAuth + session + domain-check middleware      | —       |
 | C10 | Web Push sender (VAPID) + service worker + sub store  | —       |
 | C11 | Docker image + compose + Coolify volume mount         | —       |
@@ -151,7 +151,7 @@ Cells: link strength (9/3/1/blank). Importance = `Σ(goal weight × strength)`.
 | 4 | F4 dot legibility | Readable to the cap | Seed N defects on one section, eyeball | Lower the visible-dot cap / tighten "+N more" threshold |
 | 5 | F7 push latency | ≤10s to device | File a defect, time the phone | Accept the delay; show an in-app unread badge as fallback (no retry queue) |
 | 6 | F6 dashboard render | ≤1s @ ~2k defects | Seed 2k rows, measure render | Add index on (section_id, created_at); precompute section counts |
-| 7 | F10 durability | 0 data loss on redeploy | Redeploy on Coolify, verify data present | Confirm volume mount; block launch until verified |
+| 7 | F10 durability | 0 data loss on redeploy | Redeploy on Coolify, verify data present | Restore from Coolify's automatic Postgres backup; block launch until verified |
 
 ## 8. Tradeoffs — Got / Paid / ADR
 
@@ -161,7 +161,7 @@ Cells: link strength (9/3/1/blank). Importance = `Σ(goal weight × strength)`.
 | T2 | Append-only log over lifecycle | Trivial model, fast v1 | No countermeasure/close tracking (deferred) | — |
 | T3 | Transparent attribution over blameless | Accountability + follow-up path | Cultural risk of chilled reporting | ADR 0002 |
 | T4 | Defect = board artifact over project-work classification | Board-as-product weak-point analysis | Can't capture project-level problems (different concept) | ADR 0001 |
-| T5 | SQLite over Postgres | Zero-ops, single container | Must mount a persistent volume; single-writer; manual backups | — |
+| T5 | Coolify-managed Postgres over SQLite | Automatic backups; no deploy-strategy constraint; concurrent connections | One more service in dev and prod than a single file | ADR 0003 |
 | T6 | Web Push over Slack/email | No third-party dependency; native phone push | Subscription management; breaks if browser storage cleared | — |
 | T7 | Section-level pin over exact-spot | Simpler model | Dot positions cosmetic; precise location lost | — |
 | T8 | Fire-and-forget push, no queue | Filing stays fast; minimal infra | Push is best-effort, not retried on failure | — |

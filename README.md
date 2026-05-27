@@ -28,14 +28,19 @@ House of Quality: **F1 board definition → F2/F3 filing → F4/F5 weak-point ma
 | [docs/house-of-quality.md](./docs/house-of-quality.md) | TikZ "House of Quality" — a visual rendering of the DESIGN.md matrices for review/slides. |
 | [docs/adr/0001](./docs/adr/0001-defects-are-about-the-board-not-project-work.md) | Why a Defect is feedback about the **Board artifact**, not the reporter's project work. |
 | [docs/adr/0002](./docs/adr/0002-attribution-is-transparent-not-blameless.md) | Why attribution is **transparent** rather than blameless. |
+| [docs/adr/0003](./docs/adr/0003-use-coolify-managed-postgres-over-sqlite.md) | Why the data store is **Coolify-managed Postgres**, not SQLite. |
+| [tasks/plan.md](./tasks/plan.md) | Implementation plan — phased, dependency-ordered tasks with acceptance criteria. |
 
 ## Stack
 
-Nuxt 3 (full-stack Vue) · SQLite + Drizzle on a persistent volume · Google
-OAuth (`hd=theodo.com` + server-side domain recheck) · Web Push (PWA) ·
+Nuxt 3 (full-stack Vue) · PostgreSQL + Drizzle (Coolify-managed, auto-backups) ·
+Google OAuth (`hd=theodo.com` + server-side domain recheck) · Web Push (PWA) ·
 Docker Compose on Coolify.
 
 ## Deployment notes
 
-- **SQLite needs a persistent Coolify volume** — without it, redeploys wipe all data.
+- **Use Coolify's managed Postgres** (with scheduled backups); the app connects
+  via `DATABASE_URL`. See [ADR 0003](./docs/adr/0003-use-coolify-managed-postgres-over-sqlite.md).
+- **Don't auto-deploy from `main`** — every merge would deploy. Use a tagged
+  release or manual trigger.
 - **Don't trust the OAuth `hd` claim alone** — verify the email domain server-side.

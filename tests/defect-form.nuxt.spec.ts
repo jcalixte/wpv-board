@@ -22,23 +22,43 @@ beforeEach(() => {
   )
 })
 
-async function pickProject(wrapper: Awaited<ReturnType<typeof mountSuspended>>) {
+type Wrapper = Awaited<ReturnType<typeof mountSuspended>>
+const dialogEl = (w: Wrapper) => w.find('dialog').element as HTMLDialogElement
+
+async function pickProject(wrapper: Wrapper) {
   await wrapper.find('[data-test="project-input"]').trigger('focus')
   await wrapper.find('[data-test="project-option"]').trigger('click')
 }
 
 describe('DefectForm', () => {
-  it('opens for the clicked section and shows its name', async () => {
+  it('opens the native dialog for the clicked section and shows its name', async () => {
     const wrapper = await mountSuspended(DefectForm, { props: { sectionId: 'macroplan' } })
     await flushPromises()
 
-    expect(wrapper.find('dialog').classes()).toContain('modal-open')
+    expect(dialogEl(wrapper).open).toBe(true)
     expect(wrapper.text()).toContain('Macroplan')
   })
 
-  it('is closed when no section is selected', async () => {
+  it('stays closed when no section is selected', async () => {
     const wrapper = await mountSuspended(DefectForm, { props: { sectionId: null } })
-    expect(wrapper.find('dialog').classes()).not.toContain('modal-open')
+    await flushPromises()
+    expect(dialogEl(wrapper).open).toBe(false)
+  })
+
+  it('closes the dialog when the section is cleared', async () => {
+    const wrapper = await mountSuspended(DefectForm, { props: { sectionId: 'macroplan' } })
+    await flushPromises()
+    await wrapper.setProps({ sectionId: null })
+    await flushPromises()
+    expect(dialogEl(wrapper).open).toBe(false)
+  })
+
+  it('emits close when the dialog is dismissed (Escape/backdrop fire native close)', async () => {
+    const wrapper = await mountSuspended(DefectForm, { props: { sectionId: 'macroplan' } })
+    await flushPromises()
+
+    dialogEl(wrapper).dispatchEvent(new Event('close'))
+    expect(wrapper.emitted('close')).toBeTruthy()
   })
 
   it('cannot submit until both a project and verbatim are provided', async () => {
@@ -48,7 +68,6 @@ describe('DefectForm', () => {
     expect(wrapper.find('[data-test="submit"]').attributes('disabled')).toBeDefined()
 
     await pickProject(wrapper)
-    // project but no verbatim → still blocked
     expect(wrapper.find('[data-test="submit"]').attributes('disabled')).toBeDefined()
 
     await wrapper.find('[data-test="verbatim"]').setValue('builds are flaky')
@@ -61,7 +80,7 @@ describe('DefectForm', () => {
 
     await pickProject(wrapper)
     await wrapper.find('[data-test="verbatim"]').setValue('builds are flaky')
-    await wrapper.find('form').trigger('submit')
+    await wrapper.find('[data-test="defect-form"]').trigger('submit')
 
     await vi.waitFor(() => expect(wrapper.emitted('filed')).toBeTruthy())
     expect(filed).toEqual({

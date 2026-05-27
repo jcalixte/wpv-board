@@ -2,6 +2,9 @@
 // File a defect against a board section (C3, F2). Driven by `sectionId`: when a
 // section is clicked the modal opens pre-targeted to it; pick a project, type
 // what's wrong, submit. Reporter and timestamp are added server-side.
+//
+// Uses the native <dialog> (DaisyUI `modal`), so Escape, focus-trapping and the
+// backdrop come for free; the parent-controlled `sectionId` drives open/close.
 import { sections } from '~/board/definition'
 
 interface Project {
@@ -19,6 +22,7 @@ interface Defect {
 const props = defineProps<{ sectionId: string | null }>()
 const emit = defineEmits<{ close: []; filed: [Defect] }>()
 
+const dialog = ref<HTMLDialogElement>()
 const project = ref<Project | null>(null)
 const verbatim = ref('')
 const busy = ref(false)
@@ -31,15 +35,22 @@ const canSubmit = computed(
   () => project.value !== null && verbatim.value.trim().length > 0,
 )
 
-// Each time a (new) section opens, start from a clean form.
-watch(
-  () => props.sectionId,
-  () => {
+// Mirror the parent-controlled section into the dialog's open state, resetting
+// the form each time a (new) section opens.
+function sync() {
+  const el = dialog.value
+  if (!el) return
+  if (props.sectionId !== null) {
     project.value = null
     verbatim.value = ''
     error.value = ''
-  },
-)
+    if (!el.open) el.showModal()
+  } else if (el.open) {
+    el.close()
+  }
+}
+onMounted(sync)
+watch(() => props.sectionId, sync)
 
 async function submit() {
   if (!canSubmit.value || busy.value || !props.sectionId) return
@@ -64,11 +75,15 @@ async function submit() {
 </script>
 
 <template>
-  <dialog class="modal" :class="{ 'modal-open': sectionId !== null }">
+  <dialog ref="dialog" class="modal" @close="emit('close')">
     <div class="modal-box">
       <h3 class="text-lg font-bold">Report a problem — {{ sectionLabel }}</h3>
 
-      <form class="mt-4 flex flex-col gap-4" @submit.prevent="submit">
+      <form
+        class="mt-4 flex flex-col gap-4"
+        data-test="defect-form"
+        @submit.prevent="submit"
+      >
         <fieldset class="fieldset">
           <legend class="fieldset-legend">Project</legend>
           <ProjectAutocomplete v-model="project" />
@@ -88,7 +103,7 @@ async function submit() {
         <p v-if="error" class="text-error text-sm" role="alert">{{ error }}</p>
 
         <div class="modal-action">
-          <button type="button" class="btn btn-ghost" @click="emit('close')">
+          <button type="button" class="btn btn-ghost" @click="dialog?.close()">
             Cancel
           </button>
           <button
@@ -103,12 +118,9 @@ async function submit() {
       </form>
     </div>
 
-    <!-- Click the backdrop to dismiss. -->
-    <button
-      type="button"
-      class="modal-backdrop"
-      aria-label="Close"
-      @click="emit('close')"
-    />
+    <!-- Native backdrop: clicking it closes the dialog. -->
+    <form method="dialog" class="modal-backdrop">
+      <button aria-label="Close">close</button>
+    </form>
   </dialog>
 </template>

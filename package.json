@@ -13,7 +13,8 @@
     "test:watch": "vitest",
     "typecheck": "nuxt typecheck",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "tsx server/db/migrate.ts"
+    "db:migrate": "tsx server/db/migrate.ts",
+    "db:verify": "tsx scripts/verify-db.ts"
   },
   "dependencies": {
     "drizzle-orm": "^0.45.2",

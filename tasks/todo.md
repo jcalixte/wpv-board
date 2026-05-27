@@ -10,7 +10,7 @@ review.
 - [ ] ⛳ **Checkpoint:** build + tests pass, board interactive, human review
 
 ## Phase 2 — File a defect (G1)
-- [ ] **T3** Postgres schema + migrations (C8) (S) — _deps: T1_
+- [x] **T3** Postgres schema + migrations (C8) (S) — _deps: T1_
 - [ ] **T4** Projects API + ProjectAutocomplete (C4) — F3 (M) — _deps: T3_
 - [ ] **T5** File a defect: POST /api/defects + DefectForm (C3) — F2 (M) — _deps: T2, T3, T4_
 - [ ] ⛳ **Checkpoint:** defect files end-to-end (dev auth), tests pass, human review

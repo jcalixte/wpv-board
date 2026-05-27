@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { board } from '~/board/definition'
+import { ref } from "vue";
+import { board } from "~/board/definition";
 
-defineEmits<{ select: [sectionId: string] }>()
+defineEmits<{ select: [sectionId: string] }>();
 
 // JS-tracked hover (rather than CSS :hover) so the highlight is observable in
 // tests and can later coordinate with the dashboard dot layer.
-const hoveredId = ref<string | null>(null)
+const hoveredId = ref<string | null>(null);
 </script>
 
 <template>
@@ -60,7 +60,8 @@ const hoveredId = ref<string | null>(null)
   grid-template-columns: max-content max-content;
   justify-content: center;
   gap: 0.75rem;
-  font-family: 'Cutive Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-family:
+    "Cutive Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   /* Base = A4 long side; A3/A2 derive from it by √2 so ratios stay exact.
      Tune this single value to resize the whole board. */
   --sheet-base: 220px;
@@ -76,11 +77,13 @@ const hoveredId = ref<string | null>(null)
   font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  text-align: center;
 }
 
 .block__columns {
   display: flex;
   align-items: flex-start;
+  justify-content: center;
   gap: 0.5rem;
 }
 
@@ -107,9 +110,15 @@ const hoveredId = ref<string | null>(null)
 
 /* Each step up the A-series scales linear dimensions by √2 (A3 = A4·√2,
    A2 = A4·2), so the boxes keep the true relative paper sizes. */
-.section--a4 { width: var(--sheet-base); }
-.section--a3 { width: calc(var(--sheet-base) * 1.41421356); }
-.section--a2 { width: calc(var(--sheet-base) * 2); }
+.section--a4 {
+  width: var(--sheet-base);
+}
+.section--a3 {
+  width: calc(var(--sheet-base) * 1.41421356);
+}
+.section--a2 {
+  width: calc(var(--sheet-base) * 2);
+}
 
 .section.is-hovered {
   outline: 2px solid currentColor;

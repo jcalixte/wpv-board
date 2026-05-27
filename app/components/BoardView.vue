@@ -40,6 +40,7 @@ const hoveredId = ref<string | null>(null);
           >
             <span class="section__label">{{ section.label }}</span>
             <span class="section__size">{{ section.size }}</span>
+            <slot name="overlay" :section-id="section.id" />
           </button>
         </div>
       </div>
@@ -104,6 +105,8 @@ const hoveredId = ref<string | null>(null);
   cursor: pointer;
   padding: 0.5rem;
   box-sizing: border-box;
+  /* Positioning context for the dashboard's absolutely-placed dots (C5). */
+  position: relative;
   /* ISO 216: every A-series sheet is landscape √2 : 1 (width : height). */
   aspect-ratio: 1.41421356 / 1;
 }

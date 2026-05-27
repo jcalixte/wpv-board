@@ -1,14 +1,20 @@
 // Drizzle (Postgres) schema (C8).
 // `section_id` is a plain string referencing the in-code board section ids
 // (C1) — no foreign key, because sections live in code, not the DB (ADR 0001).
-import { pgTable, uuid, text, timestamp } from 'drizzle-orm/pg-core'
+import { pgTable, uuid, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core'
+import { sql } from 'drizzle-orm'
 import { randomUUID } from 'node:crypto'
 
-export const projects = pgTable('projects', {
-  id: uuid('id').primaryKey().$defaultFn(randomUUID),
-  name: text('name').notNull().unique(),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-})
+export const projects = pgTable(
+  'projects',
+  {
+    id: uuid('id').primaryKey().$defaultFn(randomUUID),
+    name: text('name').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  // Case-insensitive uniqueness: "Acme" and "acme" are the same project (F3).
+  (t) => [uniqueIndex('projects_name_lower_idx').on(sql`lower(${t.name})`)],
+)
 
 export const defects = pgTable('defects', {
   id: uuid('id').primaryKey().$defaultFn(randomUUID),

@@ -1,6 +1,12 @@
 <script setup lang="ts">
 // Single domain (ADR 0004): report at `/`, view all defects at `/defects`,
 // with a persistent header to move between them.
+const { loggedIn, user, clear } = useUserSession()
+
+async function signOut() {
+  await clear()
+  await navigateTo('/login')
+}
 </script>
 
 <template>
@@ -25,6 +31,12 @@
             </NuxtLink>
           </li>
         </ul>
+        <div v-if="loggedIn" class="flex items-center gap-3 pl-2">
+          <span class="hidden text-sm opacity-70 sm:inline">{{ user?.email }}</span>
+          <button type="button" class="btn btn-ghost btn-sm" @click="signOut">
+            Sign out
+          </button>
+        </div>
       </nav>
     </header>
 

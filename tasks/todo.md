@@ -19,10 +19,10 @@ review.
 - [x] **T6** Defects read API: feed + per-section counts (C7) — F6 (M) — _deps: T3_
 - [x] **T7** Dashboard DotMap (C5) — F4 (M) — _deps: T2, T6_
 - [x] **T8** VerbatimModal + Feed (C6) — F5 (M) — _deps: T6, T7_
-- [ ] ⛳ **Checkpoint:** dashboard dot map + feed + modal work, ≤350ms @2k, human review
+- [x] ⛳ **Checkpoint:** dashboard dot map + feed + modal work, ≤350ms @2k, human review
 
 ## Phase 4 — Authentication (G4)
-- [ ] **T9** Google OAuth + session + domain-check middleware (C9) — F9 (M) — _deps: T1, retrofits T5_
+- [x] **T9** Google OAuth + session + domain-check middleware (C9) — F9 (M) — _deps: T1, retrofits T5_
 - [ ] ⛳ **Checkpoint:** both views gated to @theodo.com, reporters real, human review
 
 ## Phase 5 — Notifications (G3)
@@ -35,7 +35,7 @@ review.
 - [ ] ⛳ **Checkpoint:** data survives redeploy, both subdomains live, ready for review
 
 ## Blocked on open questions (see plan.md)
-- [ ] Google OAuth client provisioning (blocks T9)
+- [x] Google OAuth client provisioning (blocks T9) — client provided; redirect URI `…/auth/google/callback`
 - [ ] Confirm pnpm + Vitest + Playwright vs Theodo template (affects T1)
 - [ ] Coolify two-domain routing model (affects T12)
 - [ ] "Owner only" vs any subscribed user for push (affects T10/T11)

@@ -61,8 +61,10 @@ migrate step is needed.
 1. Point Coolify at this repo; it builds the production `Dockerfile`.
 2. Create a **managed Postgres** in Coolify (automatic backups — [ADR 0003](./docs/adr/0003-use-coolify-managed-postgres-over-sqlite.md))
    and set `DATABASE_URL` to it. _(Alternatively deploy `docker-compose.yml`, which bundles a Postgres service.)_
-3. Set the env vars from [`.env.example`](./.env.example) (`NUXT_SESSION_SECRET`,
-   Google OAuth, VAPID) and route `andon.apoena.dev` to the service.
+3. Set the env vars from [`.env.example`](./.env.example) (`NUXT_SESSION_PASSWORD`,
+   `NUXT_OAUTH_GOOGLE_*`, VAPID) and route `andon.apoena.dev` to the service. Add
+   `https://andon.apoena.dev/auth/google/callback` as an Authorized redirect URI
+   in the Google Cloud OAuth client.
 4. **Enable Coolify's autodeploy** so it builds and deploys on every push to
    `main`. Protect `main` with required PR review + CI so only vetted commits
    reach production.

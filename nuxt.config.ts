@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxt/eslint', '@nuxt/test-utils/module'],
+  modules: ['@nuxt/eslint', '@nuxt/test-utils/module', 'nuxt-auth-utils'],
   css: ['~/assets/css/main.css'],
   // Tailwind v4 integrates as a Vite plugin (no @nuxtjs/tailwindcss module).
   vite: {

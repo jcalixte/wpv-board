@@ -11,5 +11,5 @@ export default defineEventHandler(async (event) => {
   if (input instanceof type.errors) {
     throw createError({ statusCode: 400, statusMessage: input.summary })
   }
-  return createDefect(getDb(), { ...input, reporterEmail: getReporter(event) })
+  return createDefect(getDb(), { ...input, reporterEmail: await getReporter(event) })
 })

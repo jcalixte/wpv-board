@@ -313,7 +313,8 @@ section, project, and a verbatim snippet; log failures (no retry queue in v1).
 **Description:** Production Dockerfile; provision Coolify-managed Postgres with
 scheduled backups; configure the two domains and TLS on Coolify; wire
 env/secrets (`DATABASE_URL`, Google client, VAPID, session secret); run the
-migration on boot. Deploy from a tagged release/manual trigger, not auto-`main`.
+migration on boot. Coolify autodeploys on push to `main`, with `main`
+protected by PR review + CI.
 
 **Acceptance criteria:**
 - [ ] After a redeploy, previously filed defects are still present (0 data loss).
@@ -339,7 +340,7 @@ migration on boot. Deploy from a tagged release/manual trigger, not auto-`main`.
 | Risk | Impact | Mitigation |
 |------|--------|------------|
 | Data lost on redeploy / disk failure | High | Coolify-managed Postgres with scheduled backups; redeploy durability test (T12, ADR 0003) |
-| Auto-deploy from `main` ships every merge | Med | Deploy from tagged release / manual trigger only (T12) |
+| Autodeploy from `main` ships every merge | Med | Protect `main` with required PR review + CI; migrations-on-boot + healthcheck catch failures; Coolify keeps rollback (T12) |
 | Google `hd` claim spoofed by a custom client | High | Server-side verified-email-domain recheck (T9) |
 | Google OAuth credentials/redirect URIs unavailable | Med | `getReporter()` seam lets Phases 1–3 proceed with dev auth (T5, T9) |
 | Dot map unreadable on hot Sections | Med | Visible-dot cap + "+N more" (T7) |

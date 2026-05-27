@@ -18,5 +18,6 @@ switch to **Coolify-managed PostgreSQL** (via Drizzle's `pg` driver).
   prod — one more moving part than a single file.
 - **Supersedes** the SQLite choice in DESIGN.md (T5, F10) and the original
   `/deep-design` decision.
-- Unchanged: deploys must **not** auto-run from `main` (every merge would deploy);
-  use a tagged release or manual trigger.
+- Autodeploy from `main` is enabled (Coolify watches the repo and deploys on
+  push); `main` must be protected with required PR review + CI so only vetted
+  commits reach production.

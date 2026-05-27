@@ -2,6 +2,7 @@
   "name": "andon",
   "type": "module",
   "private": true,
+  "packageManager": "pnpm@11.0.9",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -14,7 +15,10 @@
     "typecheck": "nuxt typecheck",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx server/db/migrate.ts",
-    "db:verify": "tsx scripts/verify-db.ts"
+    "db:verify": "tsx scripts/verify-db.ts",
+    "docker:dev": "docker compose -f docker-compose.dev.yml up",
+    "docker:dev:build": "docker compose -f docker-compose.dev.yml up --build",
+    "docker:dev:down": "docker compose -f docker-compose.dev.yml down"
   },
   "dependencies": {
     "drizzle-orm": "^0.45.2",

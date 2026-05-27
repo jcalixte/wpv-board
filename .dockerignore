@@ -1,0 +1,17 @@
+.git
+node_modules
+.nuxt
+.output
+.data
+*.log
+.env
+.env.*
+!.env.example
+docker-compose*.yml
+Dockerfile*
+tests
+docs
+tasks
+.DS_Store
+.fleet
+.idea

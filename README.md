@@ -10,7 +10,7 @@ Two apps, one codebase, behind Google SSO (`@theodo.com`):
 
 - **`andon.apoena.dev`** — the reporting view: click an ASCII board section, pick
   your project, describe the problem.
-- **`dashboard.andon.apoena.dev`** — the same board as a red-dot defect map, a
+- **`dashboard-andon.apoena.dev`** — the same board as a red-dot defect map, a
   reverse-chronological feed, and verbatims in a modal.
 
 ## Status
@@ -33,14 +33,35 @@ House of Quality: **F1 board definition → F2/F3 filing → F4/F5 weak-point ma
 
 ## Stack
 
-Nuxt 3 (full-stack Vue) · PostgreSQL + Drizzle (Coolify-managed, auto-backups) ·
+Nuxt 4 (full-stack Vue) · PostgreSQL + Drizzle (Coolify-managed, auto-backups) ·
 Google OAuth (`hd=theodo.com` + server-side domain recheck) · Web Push (PWA) ·
-Docker Compose on Coolify.
+Docker on Coolify.
 
-## Deployment notes
+## Running with Docker
 
-- **Use Coolify's managed Postgres** (with scheduled backups); the app connects
-  via `DATABASE_URL`. See [ADR 0003](./docs/adr/0003-use-coolify-managed-postgres-over-sqlite.md).
-- **Don't auto-deploy from `main`** — every merge would deploy. Use a tagged
-  release or manual trigger.
-- **Don't trust the OAuth `hd` claim alone** — verify the email domain server-side.
+```bash
+# Production-like full stack (build the image + Postgres)
+docker compose up --build              # app on http://localhost:3000
+
+# Local development (hot-reload, source-mounted)
+docker compose -f docker-compose.dev.yml up
+
+# Or the dev server directly against a containerized Postgres
+docker compose -f docker-compose.dev.yml up -d db
+DATABASE_URL=postgres://andon:andon@localhost:5432/andon pnpm dev
+```
+
+Migrations are applied automatically on server boot (a Nitro plugin) — no manual
+migrate step is needed.
+
+## Deploying to Coolify
+
+1. Point Coolify at this repo; it builds the production `Dockerfile`.
+2. Create a **managed Postgres** in Coolify (automatic backups — [ADR 0003](./docs/adr/0003-use-coolify-managed-postgres-over-sqlite.md))
+   and set `DATABASE_URL` to it. _(Alternatively deploy `docker-compose.yml`, which bundles a Postgres service.)_
+3. Set the env vars from [`.env.example`](./.env.example) (`NUXT_SESSION_SECRET`,
+   Google OAuth, VAPID) and route `andon.apoena.dev` + `dashboard-andon.apoena.dev` to the service.
+4. **Enable Coolify's autodeploy** so it builds and deploys on every push to
+   `main`. Protect `main` with required PR review + CI so only vetted commits
+   reach production.
+5. The OAuth `hd` claim is spoofable — the app re-checks the email domain server-side (T9).

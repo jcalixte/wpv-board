@@ -44,11 +44,13 @@ function formatDate(value: string | Date): string {
   return `${dd}/${mm}`
 }
 
-// Cosmetic scatter: a stable 5-wide grid inside the box (ADR T7).
+// Cosmetic scatter: a stable 5-wide grid in fixed units (ADR T7), so dots
+// cluster the same way in every section regardless of paper size (A2/A3/A4)
+// rather than spreading out in the larger boxes.
 function dotStyle(index: number) {
   return {
-    left: `${12 + (index % 5) * 11}%`,
-    top: `${22 + Math.floor(index / 5) * 28}%`,
+    left: `${1.1 + (index % 5) * 1.5}rem`,
+    top: `${2 + Math.floor(index / 5) * 2.6}rem`,
   }
 }
 </script>

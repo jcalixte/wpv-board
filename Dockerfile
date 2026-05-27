@@ -5,7 +5,11 @@ FROM node:24-alpine AS build
 RUN corepack enable
 WORKDIR /app
 COPY . .
-RUN pnpm install --frozen-lockfile
+# Cache the pnpm store across builds so dependencies aren't re-downloaded on
+# every source change. Source is copied first because the root `postinstall`
+# (nuxt prepare) needs it.
+RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
+    pnpm install --frozen-lockfile
 RUN pnpm build
 
 # --- Runtime stage: minimal image running the built server ---

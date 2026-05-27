@@ -16,7 +16,7 @@ review.
 - [ ] ⛳ **Checkpoint:** defect files end-to-end (dev auth), tests pass, human review
 
 ## Phase 3 — See weak points (G2)
-- [ ] **T6** Defects read API: feed + per-section counts (C7) — F6 (M) — _deps: T3_
+- [x] **T6** Defects read API: feed + per-section counts (C7) — F6 (M) — _deps: T3_
 - [ ] **T7** Dashboard DotMap (C5) — F4 (M) — _deps: T2, T6_
 - [ ] **T8** VerbatimModal + Feed (C6) — F5 (M) — _deps: T6, T7_
 - [ ] ⛳ **Checkpoint:** dashboard dot map + feed + modal work, ≤1s @2k, human review

@@ -1,0 +1,1 @@
+CREATE INDEX "defects_section_created_idx" ON "defects" USING btree ("section_id","created_at" DESC NULLS LAST);

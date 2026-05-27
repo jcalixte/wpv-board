@@ -1,7 +1,7 @@
 // Drizzle (Postgres) schema (C8).
 // `section_id` is a plain string referencing the in-code board section ids
 // (C1) — no foreign key, because sections live in code, not the DB (ADR 0001).
-import { pgTable, uuid, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core'
+import { pgTable, uuid, text, timestamp, uniqueIndex, index } from 'drizzle-orm/pg-core'
 import { sql } from 'drizzle-orm'
 import { randomUUID } from 'node:crypto'
 
@@ -16,16 +16,21 @@ export const projects = pgTable(
   (t) => [uniqueIndex('projects_name_lower_idx').on(sql`lower(${t.name})`)],
 )
 
-export const defects = pgTable('defects', {
-  id: uuid('id').primaryKey().$defaultFn(randomUUID),
-  sectionId: text('section_id').notNull(),
-  projectId: uuid('project_id')
-    .notNull()
-    .references(() => projects.id),
-  verbatim: text('verbatim').notNull(),
-  reporterEmail: text('reporter_email').notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-})
+export const defects = pgTable(
+  'defects',
+  {
+    id: uuid('id').primaryKey().$defaultFn(randomUUID),
+    sectionId: text('section_id').notNull(),
+    projectId: uuid('project_id')
+      .notNull()
+      .references(() => projects.id),
+    verbatim: text('verbatim').notNull(),
+    reporterEmail: text('reporter_email').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  // Serves the per-section history and counts, and the newest-first feed (F6).
+  (t) => [index('defects_section_created_idx').on(t.sectionId, t.createdAt.desc())],
+)
 
 export const pushSubscriptions = pgTable('push_subscriptions', {
   id: uuid('id').primaryKey().$defaultFn(randomUUID),

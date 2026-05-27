@@ -17,6 +17,7 @@
     "db:migrate": "tsx server/db/migrate.ts",
     "db:seed": "tsx server/db/seed.ts",
     "db:verify": "tsx scripts/verify-db.ts",
+    "vapid:keys": "tsx scripts/generate-vapid.ts",
     "docker:dev": "docker compose -f docker-compose.dev.yml up",
     "docker:dev:build": "docker compose -f docker-compose.dev.yml up --build",
     "docker:dev:down": "docker compose -f docker-compose.dev.yml down"
@@ -28,13 +29,15 @@
     "nuxt-auth-utils": "^0.5.29",
     "pg": "^8.21.0",
     "vue": "^3.5.34",
-    "vue-router": "^5.0.7"
+    "vue-router": "^5.0.7",
+    "web-push": "^3.6.7"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.15.2",
     "@nuxt/test-utils": "^4.0.3",
     "@tailwindcss/vite": "^4.3.0",
     "@types/pg": "^8.20.0",
+    "@types/web-push": "^3.6.4",
     "@vue/test-utils": "^2.4.10",
     "daisyui": "^5.5.20",
     "drizzle-kit": "^0.31.10",

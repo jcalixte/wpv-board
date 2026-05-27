@@ -29,9 +29,10 @@ const openSection = ref<string | null>(null)
 
 <template>
   <main class="mx-auto flex max-w-5xl flex-col items-center gap-6 p-6">
-    <header class="text-center">
+    <header class="flex flex-col items-center gap-2 text-center">
       <h1>Andon — weak points</h1>
       <p class="opacity-70">Every defect filed on the board.</p>
+      <EnableNotifications />
     </header>
 
     <DotMap :defects="defects" :counts="counts" @select="openSection = $event" />

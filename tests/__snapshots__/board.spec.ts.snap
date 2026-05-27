@@ -1,0 +1,32 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`BoardView > matches the rendered board snapshot 1`] = `
+"<div data-v-0ced9e89="" class="board">
+  <section data-v-0ced9e89="" class="block" data-block-id="value-for-customer">
+    <h2 data-v-0ced9e89="" class="block__title">Value for Customer</h2>
+    <div data-v-0ced9e89="" class="block__columns">
+      <div data-v-0ced9e89="" class="block__column"><button data-v-0ced9e89="" type="button" class="section section--a4" data-section-id="client-satisfaction"><span data-v-0ced9e89="" class="section__label">Client Satisfaction</span><span data-v-0ced9e89="" class="section__size">A4</span></button><button data-v-0ced9e89="" type="button" class="section section--a4" data-section-id="product-architecture"><span data-v-0ced9e89="" class="section__label">Product Architecture</span><span data-v-0ced9e89="" class="section__size">A4</span></button></div>
+    </div>
+  </section>
+  <section data-v-0ced9e89="" class="block" data-block-id="right-first-time-jit">
+    <h2 data-v-0ced9e89="" class="block__title">Right First Time &amp; Just in Time</h2>
+    <div data-v-0ced9e89="" class="block__columns">
+      <div data-v-0ced9e89="" class="block__column"><button data-v-0ced9e89="" type="button" class="section section--a4" data-section-id="macroplan"><span data-v-0ced9e89="" class="section__label">Macroplan</span><span data-v-0ced9e89="" class="section__size">A4</span></button><button data-v-0ced9e89="" type="button" class="section section--a4" data-section-id="defect-visualisation"><span data-v-0ced9e89="" class="section__label">Defect Visualisation</span><span data-v-0ced9e89="" class="section__size">A4</span></button></div>
+      <div data-v-0ced9e89="" class="block__column"><button data-v-0ced9e89="" type="button" class="section section--a2" data-section-id="feature-kanban"><span data-v-0ced9e89="" class="section__label">Feature Kanban</span><span data-v-0ced9e89="" class="section__size">A2</span></button></div>
+    </div>
+  </section>
+  <section data-v-0ced9e89="" class="block" data-block-id="tech-enabled-network">
+    <h2 data-v-0ced9e89="" class="block__title">Tech-Enabled Network of Teams</h2>
+    <div data-v-0ced9e89="" class="block__columns">
+      <div data-v-0ced9e89="" class="block__column"><button data-v-0ced9e89="" type="button" class="section section--a3" data-section-id="tech-working-condition"><span data-v-0ced9e89="" class="section__label">Tech Working Condition</span><span data-v-0ced9e89="" class="section__size">A3</span></button></div>
+    </div>
+  </section>
+  <section data-v-0ced9e89="" class="block" data-block-id="learning-organisation">
+    <h2 data-v-0ced9e89="" class="block__title">Building a Learning Organisation</h2>
+    <div data-v-0ced9e89="" class="block__columns">
+      <div data-v-0ced9e89="" class="block__column"><button data-v-0ced9e89="" type="button" class="section section--a3" data-section-id="problem-solving"><span data-v-0ced9e89="" class="section__label">Problem Solving</span><span data-v-0ced9e89="" class="section__size">A3</span></button></div>
+      <div data-v-0ced9e89="" class="block__column"><button data-v-0ced9e89="" type="button" class="section section--a3" data-section-id="weak-point-management"><span data-v-0ced9e89="" class="section__label">Weak Point Management</span><span data-v-0ced9e89="" class="section__size">A3</span></button></div>
+    </div>
+  </section>
+</div>"
+`;

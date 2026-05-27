@@ -6,7 +6,7 @@ review.
 
 ## Phase 1 — Foundation & board spine
 - [x] **T1** Scaffold Nuxt 4 + tooling + Dockerised dev (M) — _deps: none_
-- [ ] **T2** Board-definition module (C1) + BoardView (C2) — F1 (M) — _deps: T1_
+- [x] **T2** Board-definition module (C1) + BoardView (C2) — F1 (M) — _deps: T1_
 - [ ] ⛳ **Checkpoint:** build + tests pass, board interactive, human review
 
 ## Phase 2 — File a defect (G1)

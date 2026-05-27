@@ -52,7 +52,10 @@ const hoveredId = ref<string | null>(null)
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.75rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-family: 'Cutive Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  /* Base = A4 long side; A3/A2 derive from it by √2 so ratios stay exact.
+     Tune this single value to resize the whole board. */
+  --sheet-base: 220px;
 }
 
 .block {
@@ -90,18 +93,23 @@ const hoveredId = ref<string | null>(null)
   cursor: pointer;
   padding: 0.5rem;
   box-sizing: border-box;
-  /* ISO 216: every A-series sheet is portrait 1 : √2. */
-  aspect-ratio: 1 / 1.41421356;
+  /* ISO 216: every A-series sheet is landscape √2 : 1 (width : height). */
+  aspect-ratio: 1.41421356 / 1;
 }
 
 /* Each step up the A-series scales linear dimensions by √2 (A3 = A4·√2,
    A2 = A4·2), so the boxes keep the true relative paper sizes. */
-.section--a4 { width: 120px; }
-.section--a3 { width: calc(120px * 1.41421356); }
-.section--a2 { width: 240px; }
+.section--a4 { width: var(--sheet-base); }
+.section--a3 { width: calc(var(--sheet-base) * 1.41421356); }
+.section--a2 { width: calc(var(--sheet-base) * 2); }
 
 .section.is-hovered {
   outline: 2px solid currentColor;
+}
+
+.section__label {
+  overflow-wrap: anywhere;
+  line-height: 1.2;
 }
 
 .section__size {

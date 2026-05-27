@@ -15,7 +15,7 @@ export interface NewDefect {
 /** Persist a filed defect and return the stored row. */
 export async function createDefect(db: Db, input: NewDefect) {
   const [row] = await db.insert(defects).values(input).returning()
-  return row
+  return row!
 }
 
 /** Recent defects, newest first — the dashboard feed (F5/F6). */

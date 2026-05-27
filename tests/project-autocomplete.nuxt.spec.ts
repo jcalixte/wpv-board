@@ -41,7 +41,7 @@ describe('ProjectAutocomplete', () => {
     const wrapper = await mountSuspended(ProjectAutocomplete)
     await flushPromises()
 
-    await wrapper.find('[data-test="project-input"]').trigger('focus')
+    await wrapper.find('[data-test="project-input"]').trigger('click')
     const names = wrapper
       .findAll('[data-test="project-option"]')
       .map((el) => el.text())
@@ -84,7 +84,7 @@ describe('ProjectAutocomplete', () => {
     // Persisted to the store and now selectable without reload — reopening the
     // list (the create flow closes it) shows the new project.
     expect(store.map((p) => p.name)).toContain('Initech')
-    await wrapper.find('[data-test="project-input"]').trigger('focus')
+    await wrapper.find('[data-test="project-input"]').trigger('click')
     const names = wrapper
       .findAll('[data-test="project-option"]')
       .map((el) => el.text())

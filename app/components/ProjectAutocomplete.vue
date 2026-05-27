@@ -66,7 +66,7 @@ async function create() {
       data-test="project-input"
       placeholder="Project…"
       autocomplete="off"
-      @focus="open = true"
+      @click="open = true"
       @input="open = true"
     >
     <ul v-if="open && (filtered.length || canCreate)" class="options">

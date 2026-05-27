@@ -26,7 +26,7 @@ type Wrapper = Awaited<ReturnType<typeof mountSuspended>>
 const dialogEl = (w: Wrapper) => w.find('dialog').element as HTMLDialogElement
 
 async function pickProject(wrapper: Wrapper) {
-  await wrapper.find('[data-test="project-input"]').trigger('focus')
+  await wrapper.find('[data-test="project-input"]').trigger('click')
   await wrapper.find('[data-test="project-option"]').trigger('click')
 }
 

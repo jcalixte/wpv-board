@@ -62,10 +62,36 @@ migrate step is needed.
 2. Create a **managed Postgres** in Coolify (automatic backups — [ADR 0003](./docs/adr/0003-use-coolify-managed-postgres-over-sqlite.md))
    and set `DATABASE_URL` to it. _(Alternatively deploy `docker-compose.yml`, which bundles a Postgres service.)_
 3. Set the env vars from [`.env.example`](./.env.example) (`NUXT_SESSION_PASSWORD`,
-   `NUXT_OAUTH_GOOGLE_*`, VAPID) and route `andon.apoena.dev` to the service. Add
+   `NUXT_OAUTH_GOOGLE_*`, `NUXT_*VAPID*`, `NUXT_PUBLIC_OWNER_EMAIL`) and route
+   `andon.apoena.dev` to the service. Add
    `https://andon.apoena.dev/auth/google/callback` as an Authorized redirect URI
    in the Google Cloud OAuth client.
 4. **Enable Coolify's autodeploy** so it builds and deploys on every push to
    `main`. Protect `main` with required PR review + CI so only vetted commits
    reach production.
 5. The OAuth `hd` claim is spoofable — the app re-checks the email domain server-side (T9).
+
+### Secrets
+
+Mark the secret vars (`NUXT_SESSION_PASSWORD`, `NUXT_OAUTH_GOOGLE_CLIENT_SECRET`,
+`NUXT_VAPID_PRIVATE_KEY`, the Postgres password) as **runtime-only** in Coolify —
+**not** build-time variables. The app reads them from runtime config at boot, so
+the build never needs them. Marking them as build variables passes them as Docker
+`ARG`s, which leaks them into build logs and image layers (Docker warns
+`SecretsUsedInArgOrEnv`). Only `NUXT_PUBLIC_*` values are non-secret. If a secret
+is ever exposed, **rotate it** and redeploy (rotating `NUXT_SESSION_PASSWORD`
+invalidates all existing sessions).
+
+### Troubleshooting: a deploy that looks stale
+
+If the live site shows old UI after a successful deploy, check in this order —
+it's almost never the build:
+
+1. **Confirm what's actually live.** `git log -1 origin/main` is the source of
+   truth; a local-only commit can't deploy. The Coolify deploy log shows the
+   built commit, a non-cached `RUN pnpm build`, and a healthy rolling update.
+2. **Client cache.** Hard-refresh (`Cmd+Shift+R`) or open a private window. A
+   browser-cached HTML document referencing old chunk hashes is the usual cause.
+3. **CDN/proxy cache.** If a CDN (e.g. Cloudflare) fronts the domain, purge it.
+4. **Build cache (last resort).** Redeploy in Coolify with cache disabled / force
+   rebuild.

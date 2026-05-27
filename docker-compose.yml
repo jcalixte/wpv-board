@@ -1,0 +1,35 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgres://andon:andon@db:5432/andon
+      HOST: 0.0.0.0
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: andon
+      POSTGRES_PASSWORD: andon
+      POSTGRES_DB: andon
+    ports:
+      - "5432:5432"
+    volumes:
+      - andon_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U andon"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  andon_pgdata:

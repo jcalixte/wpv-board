@@ -31,7 +31,7 @@ Strength weights used in matrices: **9** strong, **3** medium, **1** weak, blank
 | F3  | Suggest existing projects (creatable, deduped)                    |  ↑  | 0 retypes for known projects; new ones persisted          |
 | F4  | Render the red-dot defect map legibly                             |  →  | Readable to a cap (~8–12 visible dots/section, then "+N more") |
 | F5  | Show verbatim detail without leaving the board                    |  →  | Modal open/close; board stays visible                     |
-| F6  | Render the dashboard quickly at expected volume                   |  ↓  | ≤ ~1s for up to ~2,000 defects                            |
+| F6  | Render the dashboard quickly at expected volume                   |  ↓  | ≤350ms for up to ~2,000 defects                           |
 | F7  | Deliver a push promptly after a defect is filed                   |  ↓  | ≤ ~10s to subscribed devices                              |
 | F8  | Enroll & maintain push subscriptions                              |  →  | Multiple devices; survives re-subscribe                   |
 | F9  | Gate every request behind Google SSO + server-side domain check   |  →  | 100% of routes; `hd` never trusted alone                  |
@@ -56,7 +56,7 @@ Strength weights used in matrices: **9** strong, **3** medium, **1** weak, blank
   - **F5** Show verbatim without leaving the board  _→ modal_
     - **How**: click a section/dot → modal lists that section's defects (date, project, reporter, verbatim); a reverse-chronological feed sits alongside
       - **Component**: C6 VerbatimModal + Feed
-  - **F6** Dashboard renders quickly  _↓ ≤1s @2k defects_
+  - **F6** Dashboard renders quickly  _↓ ≤350ms @2k defects_
     - **How**: server returns per-section counts + a bounded recent slice; full section history fetched lazily on modal open
       - **Component**: C7 server API, C8 schema
 - **G3** Owner notified promptly on phone  _W:7_
@@ -150,7 +150,7 @@ Cells: link strength (9/3/1/blank). Importance = `Σ(goal weight × strength)`.
 | 3 | F9 auth coverage | 100% of routes gated | Integration test hitting routes unauthenticated | Default-deny middleware; block deploy if a route leaks |
 | 4 | F4 dot legibility | Readable to the cap | Seed N defects on one section, eyeball | Lower the visible-dot cap / tighten "+N more" threshold |
 | 5 | F7 push latency | ≤10s to device | File a defect, time the phone | Accept the delay; show an in-app unread badge as fallback (no retry queue) |
-| 6 | F6 dashboard render | ≤1s @ ~2k defects | Seed 2k rows, measure render | Add index on (section_id, created_at); precompute section counts |
+| 6 | F6 dashboard render | ≤350ms @ ~2k defects | Seed 2k rows, measure render | Add index on (section_id, created_at); precompute section counts |
 | 7 | F10 durability | 0 data loss on redeploy | Redeploy on Coolify, verify data present | Restore from Coolify's automatic Postgres backup; block launch until verified |
 
 ## 8. Tradeoffs — Got / Paid / ADR

@@ -15,9 +15,15 @@ import * as schema from '../../server/db/schema'
 // to a module namespace), so we sidestep the transform entirely.
 const pg = createRequire(import.meta.url)('pg') as typeof pgType
 
-const TEST_URL =
-  process.env.TEST_DATABASE_URL ??
-  'postgres://andon:andon@localhost:5432/andon_test'
+// Each Vitest worker gets its own database so specs that truncate between
+// tests can't clobber one another when files run in parallel.
+const TEST_URL = (() => {
+  const base =
+    process.env.TEST_DATABASE_URL ?? 'postgres://andon:andon@localhost:5432/andon_test'
+  const url = new URL(base)
+  url.pathname = `${url.pathname}_${process.env.VITEST_POOL_ID ?? '1'}`
+  return url.toString()
+})()
 
 export type TestDb = NodePgDatabase<typeof schema>
 
